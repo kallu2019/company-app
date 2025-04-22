@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,17 +23,17 @@ import com.test.company.repository.EmployeeRepository;
 
 //@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/employee")
 public class EmployeeController {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
-	@GetMapping("/employees")
+	@GetMapping("/getAll")
 	public List<Employee> getAllEmployees() {
 		return employeeRepository.findAll();
 	}
 
-	@GetMapping("/employees/{id}")
+	@GetMapping("/getById/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable(value = "id") Long employeeId)
 			throws ResourceNotFoundException {
 		Employee employee = employeeRepository.findById(employeeId)
@@ -41,12 +41,12 @@ public class EmployeeController {
 		return ResponseEntity.ok().body(employee);
 	}
 
-	@PostMapping("/employees")
+	@PostMapping("/save")
 	public Employee createEmployee(@Valid @RequestBody Employee employee) {
 		return employeeRepository.save(employee);
 	}
 
-	@PostMapping("/employees/multipleSave")
+	@PostMapping("/saveAll/multipleSave")
 	public void createMultipleEmployee(List<Employee> employeeList) {
 		for (int i = 0; i < employeeList.size(); i++) {
 			Employee employee = employeeList.get(i);
@@ -57,7 +57,7 @@ public class EmployeeController {
 		}
 	}
 
-	@PutMapping("/employees/{id}")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") Long employeeId,
 			@Valid @RequestBody Employee employeeDetails) throws ResourceNotFoundException {
 		Employee employee = employeeRepository.findById(employeeId)
@@ -71,7 +71,7 @@ public class EmployeeController {
 		return ResponseEntity.ok(updatedEmployee);
 	}
 
-	@DeleteMapping("/employees/{id}")
+	@DeleteMapping("/delete/{id}")
 	public Map<String, Boolean> deleteEmployee(@PathVariable(value = "id") Long employeeId)
 			throws ResourceNotFoundException {
 		Employee employee = employeeRepository.findById(employeeId)
